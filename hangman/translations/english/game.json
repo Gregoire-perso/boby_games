@@ -1,0 +1,16 @@
+{
+	"chooseLetter": "Please, enter a letter : ", 
+	"fontIsNotLetter": "The letter you enter must not have any accent.", 
+	"letterAlreadyTried": "Crap ! This letter has already been tried.. You can try again with an other letter", 
+	"displayLetterAlreadyTried": "The letters that have been tried already are : ",
+	"tooMuchLetters": "Caution ! You have to enter one letter only, or the complete word", 
+	"bestPlayer": "Amazing ! You've reach top 5 !", 
+	"chooseWord": "Enter a mystery word the other player will have to guess (be careful, the other player must not see your word) : ", 
+	"rightLetter": "Great ! You've found a letter !", 
+	"wrongLetter": "Crap ! This letter is not in the mystery word...", 
+	"loose": "Too bad... You lost, you haven't find the mystery word... But don't worry, you can try again and do better !", 
+	"printMysteryWord": "The mystery word was {0}.", 
+	"win": "Congratulations ! You've found the mystery word just in time !", 
+	"incorrectWord": "The word must have more than 5 letters and contains only letters.", 
+	"wrongWord": "That is not the right word, but you can try again" 
+}

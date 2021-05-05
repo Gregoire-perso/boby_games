@@ -46,7 +46,7 @@ class BobyCommands(commands.Cog):
     
     @commands.command()
     async def ping(self, ctx):
-        await ctx.channel.send(embed=discord.Embed(color=discord.Color.green(), description="Pong !{0}".format(round(self.__bot.latency, 2))))
+        await ctx.channel.send(embed=discord.Embed(color=discord.Color.green(), description="Pong ! {0}s".format(round(self.__bot.latency, 2))))
 
     @commands.command()
     async def hello(self, ctx):
