@@ -3,9 +3,11 @@
 	"wrongLetter": "Dommage ! Cette lettre n'est pas dans le mot...",
 	"wrongWord": "Bien tenté, mais c'est pas ça le mot... :stuck_out_tongue:",
 	"rightLetter": "Bien joué cow-boy, vous avez trouvé une nouvelle lettre ! :+1:",
-	"rightWord": "Trop fort ! Vous avez trouvé le mot en {nb_essais} essais, et je vais donc vous laisser la vie sauve ! :clap::clap::clap:", 
+	"rightWord": "Trop fort ! Vous avez trouvé le mot en {0} essais, et je vais donc vous laisser la vie sauve ! :clap::clap::clap:", 
 	"rules": "Vous avez voulu faire le malin cow-boy ! :cowboy:\nJe crois que vous avez perdu cette fois, mais vous m'avez l'air sympa, je vais vous laisser une dernière chance.\nSi vous trouvez le mot auquel je pense à temps, vous avez la vie sauve. Mais sinon, vous finirez pendu sur la place public ! Si vous me demandez une lettre, je vous dirais où elle se trouve dans mon mot... Mais attention, vous devez trouver le mot avant que la corde vous soit passé au cou ! Allez c'est parti billy boy ! :cowboy:",
-	"letterAlreadyTried": "Mais vous êtes con, vous avez déjà essayé cette lettre !", 
-	"printMysteryWord": "Le mot qui allait vous sauver la vie était {mystery_word}...", 
-	"loose": "C'est con, vous êtes passé à ça :pinching_hand: de survivre... Mais du coup vous êtes morts"
+	"letterAlreadyTried": "Mais vous êtes con ma parole ! Vous avez déjà essayé cette lettre !", 
+	"printMysteryWord": "Le mot qui allait vous sauver la vie était {0}...", 
+	"loose": "C'est con, vous êtes passé à ça :pinching_hand: de survivre... Mais du coup vous êtes morts", 
+	"tooSlow": "Vous avez été bien trop lent cow-boy, du coup ben vous êtes morts... :skull:",
+	"askLetter": "Alors, je vous écoute, vous avez une proposition cow-boy ?"
 }

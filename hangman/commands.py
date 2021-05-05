@@ -5,6 +5,7 @@ Idées d'amélioration :
 """
 
 import discord
+import asyncio
 from discord import Color
 from discord import Embed
 from discord.ext import commands
@@ -18,11 +19,57 @@ class HangmanGame(commands.Cog):
         self.__bot = bot
         self.__language = language
         self.__ctx = ctx
+        self.__mystery_word = ""
+        self.__tried_letters = []
+        self.__nb_essais = 0
+        self.__nb_fails = 0
 
+#----------------------------------------------------------------------------------------
 
     def __check_message(self, msg):
         return msg.author == self.__ctx.author and msg.channel == self.__ctx.channel
 
+#----------------------------------------------------------------------------------------
+
+    async def __process_message(self, msg, replies):
+        """Process the message content"""
+        if len(msg.content) == 1 and msg.content.upper() in self.__tried_letters:
+            await self.__ctx.channel.send(embed=Embed(color=Color.orange(), description=replies["letterAlreadyTried"]))
+
+
+        elif len(msg.content) == 1 and msg.content.upper() in self.__mystery_word:
+            self.__tried_letters.append(msg.content.upper())
+            await self.__ctx.channel.send(embed=Embed(color=Color.green(), description=replies["rightLetter"]))
+            self.__nb_essais += 1
+
+
+        elif len(msg.content) == 1:
+            self.__tried_letters.append(msg.content.upper())
+            await self.__ctx.channel.send(embed=Embed(color=Color.orange(), description=replies["wrongLetter"]))
+            self.__nb_essais += 1
+            self.__nb_fails += 1
+
+
+        elif msg.content.upper() == self.__mystery_word:
+            await self.__ctx.channel.send(embed=Embed(color=Color.green(), description=replies["rightWord"].format(self.__nb_essais)))
+            self.__nb_essais += 1
+            return "WON"
+
+
+        else:
+            await self.__ctx.channel.send(embed=Embed(color=Color.green(), description=replies["wrongWord"].format(self.__nb_essais)))
+            self.__nb_essais += 1
+            self.__nb_fails += 1
+
+#----------------------------------------------------------------------------------------
+
+    async def __draw_hangman(self):
+        """draw the hangman"""
+        with open("hangman/hangman_"+str(self.__nb_fails)+".txt", "r") as f:
+            await self.__ctx.channel.send(embed=Embed(color=Color.light_grey(), description="```\n"+"".join(f.readlines())+"\n```"))
+
+
+#----------------------------------------------------------------------------------------
 
     async def start_game(self):
         """Start a game"""
@@ -31,29 +78,70 @@ class HangmanGame(commands.Cog):
             replies = json.load(f)
 
         # Display rules
-        await self.__ctx.channel.send(embed=Embed(color=Color.orange(), description=replies["rules"]))
+        await self.__ctx.channel.send(embed=Embed(color=Color.random(), description=replies["rules"]))
         
         # Choosing a word
-        with open("./hangman/translations/"+self.__language+".txt", "r") as words:
-            mystery_word = words.readlines()
+        with open("./hangman/translations/"+self.__language, "r") as f:
+            words = f.readlines()
 
-        mystery_word = mystery_word[randint(0, len(mystery_word)-1)]
+        self.__mystery_word = words[randint(0, len(words)-1)].upper().replace("\n", "")
 
         # Start the real game !
         found_word = False
+        display_word = "_"*len(self.__mystery_word)
+        print(self.__mystery_word)
         while not found_word:
             # Displaying the finding pattern
-            display_word = "_ "*len(mystery_word)
-            await self.__ctx.channel.send(embed=Embed(color=Color.grey(), description=display_word))
+            await self.__ctx.channel.send(embed=Embed(color=Color.light_grey(), description="`"+display_word+"`\n"+replies["askLetter"]))
 
             # Waiting for an answer
             try:
-                message = await self.__bot.wait_for('message', check=self.__check_message, timeout=30.0)
+                message = await self.__bot.wait_for('message', check=self.__check_message, timeout=30.0).replace(" ", "")
 
             except asyncio.TimeoutError:
-                await self.__ctx.channel.send(embed=Embed(color=Color.red(), description="Vous avez été bien trop lent cow-boy, vous êtes morts... :skull:"))
-                return
+                await self.__ctx.channel.send(embed=Embed(color=Color.red(), description=replies["tooSlow"]))
+                found_word = True
+                continue
 
+
+
+            # Testing message
+            if self.__process_message(message, replies) == "WON":
+                found_word = True
+                continue
+
+            elif self.__nb_fails >= 10:
+                await self.__draw_hangman()
+                await self.__ctx.channel.send(embed=Embed(color=Color.red(), description=replies["loose"]))
+                await self.__ctx.channel.send(embed=Embed(color=Color.red(), description=replies["printMysteryWord"].format(self.__mystery_word)))
+                found_word = True
+                continue
+
+            else:
+                await self.__draw_hangman()
+
+
+
+            # Modifying display_word
+            indexes = [i for i, x in enumerate(self.__mystery_word) if x in self.__tried_letters]
+            display_word = ""
+            for i in self.__mystery_word:
+                if i in self.__tried_letters:
+                    display_word += i
+                else:
+                    display_word += "_"
+
+            if not "_" in display_word:
+                await self.__ctx.channel.send(embed=Embed(color=Color.green(), description=replies["rightWord"].format(self.__nb_essais)))
+                found_word = True
+                continue
+
+
+        
+
+
+                
+            
         
         
         
@@ -66,19 +154,19 @@ class HangmanCommands(commands.Cog):
     def __init__(self, bot, language="french"):
         self.__bot = bot
         self.__language = language
+    
+    #@commands.command()
+    #async def set_language(self, ctx, text: str):
+    #    """Define the language
+    #    Must be 'french' or 'english' """
+    #    if not unidecode(text).lower() in ['french', 'english', 'francais', 'anglais']:
+    #        with open("./hangman/translations/"+self.__language+".json", "r") as replies:
+    #            wrong_language_choice = json.load(replies)["wrongLanguageChoice"]
 
-    @commands.command()
-    async def set_language(self, ctx, text: str):
-        """Define the language
-        Must be 'french' or 'english' """
-        if not unidecode(text).lower() in ['french', 'english', 'francais', 'anglais']:
-            with open("./hangman/translations/"+self.__language+".json", "r") as replies:
-                wrong_language_choice = json.load(replies)["wrongLanguageChoice"]
+    #        await ctx.channel.send(embed=discord.Embed(color=discord.Color.red(), description=wrong_language_choice))
 
-            await ctx.channel.send(embed=discord.Embed(color=discord.Color.red(), description=wrong_language_choice))
-
-        else:
-            self.__language = unidecode(text).lower()
+    #    else:
+    #        self.__language = unidecode(text).lower()
 
 
     @commands.command()
