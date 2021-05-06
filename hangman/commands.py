@@ -1,9 +1,3 @@
-""" 
-Idées d'amélioration : 
-    Faire en sorte que le choix de la langue se fasse en reaction au message
-
-"""
-
 import discord
 import asyncio
 from discord import Color
@@ -27,7 +21,7 @@ class HangmanGame(commands.Cog):
         self.__nb_fails = 0
         self.__multi = multi
 
-#----------------------------------------------------------------------------------------
+    #------------------------------------------------------------------------------------
 
     def __check_message(self, msg):
         if self.__multi:
@@ -35,7 +29,7 @@ class HangmanGame(commands.Cog):
         else:
             return msg.author == self.__ctx.author and msg.channel == self.__ctx.channel
 
-#----------------------------------------------------------------------------------------
+    #------------------------------------------------------------------------------------
 
     async def __process_message(self, msg, replies):
         """Process the message content"""
@@ -67,7 +61,7 @@ class HangmanGame(commands.Cog):
             self.__nb_essais += 1
             self.__nb_fails += 1
 
-#----------------------------------------------------------------------------------------
+    #------------------------------------------------------------------------------------
 
     async def __draw_hangman(self):
         """draw the hangman"""
@@ -75,7 +69,7 @@ class HangmanGame(commands.Cog):
             await self.__ctx.channel.send(embed=Embed(color=Color.light_grey(), description="```\n"+"".join(f.readlines())+"\n```"))
 
 
-#----------------------------------------------------------------------------------------
+    #------------------------------------------------------------------------------------
 
     async def start_game(self):
         """Start a game"""
@@ -114,6 +108,7 @@ class HangmanGame(commands.Cog):
 
             # Testing message
             if await self.__process_message(message.content.upper().replace(" ", ""), replies) == "WON":
+                await self.__ctx.channel.send(embed=Embed(color=Color.red(), description=replies["printMysteryWord"].format(self.__mystery_word)))
                 found_word = True
                 continue
 
