@@ -1,4 +1,5 @@
 {
 	"changeLanguage": "Pour changer la langue du bot, réagissez à l'émoji correspondant !",
-	"footerReaction": "Vos réactions vont être collectées pendant 1 min"
+	"footerReaction": "Vos réactions vont être collectées pendant 1 min", 
+	"changedLanguage": "Langue du bot changée avec succès !"
 }

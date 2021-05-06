@@ -150,13 +150,12 @@ class HangmanGame(commands.Cog):
 
 class HangmanCommands(commands.Cog):
     """Commands linked to hangman game"""
-    def __init__(self, bot, language="french"):
+    def __init__(self, bot):
         self.__bot = bot
-        self.__language = language
     
     @commands.command(aliases=['hangman', 'hm'])
     async def start_hangman(self, ctx):
-        game = HangmanGame(self.__bot, self.__language, ctx) # Create a new game
+        game = HangmanGame(self.__bot, self.__bot.language, ctx, multi=False) # Create a new game
         await game.start_game() # Start the new game
 
 

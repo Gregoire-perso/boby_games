@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 #import logging
 import json
+import asyncio
 import hangman.commands as hangman
 
 ABSOLUTE_PATH="./"
@@ -50,33 +51,62 @@ class BobyCommands(commands.Cog):
         self.__bot = bot
         self.__current_user = None
 
-    def language_check(self, reaction, user):
+#----------------------------------------------------------------------------------------
+
+    def check_language(self, reaction, user):
         """Check if the reaction is correct"""
-        return reaction.emoji in ['\U0001f1eb\U0001f1f7', '\U0001f1ec\U0001f1e7'] and user == self.__current_user
+        return str(reaction.emoji) in ['\U0001f1eb\U0001f1f7', '\U0001f1ec\U0001f1e7'] and user == self.__current_user
     
+#----------------------------------------------------------------------------------------
+
     @commands.command()
     async def ping(self, ctx):
         await ctx.channel.send(embed=discord.Embed(color=discord.Color.green(), description="Pong ! {0}s".format(round(self.__bot.latency, 2))))
 
+#----------------------------------------------------------------------------------------
+
     @commands.command()
     async def hello(self, ctx):
         await ctx.channel.send(embed=discord.Embed(color=discord.Color.green(), description="Salut ! Moi c'est Boby !"))
+
+#----------------------------------------------------------------------------------------
 
     @commands.command(aliases=['language', 'langue'])
     async def set_language(self, ctx):
         """Define the language used by the bot
         Choosen by reacting to the bot message """
         self.__current_user = ctx.author
+
         with open(ABSOLUTE_PATH+"translations/"+self.__bot.language+".json", "r") as f:
             replies = json.load(f)
 
         choice = await ctx.channel.send(embed=discord.Embed(color=discord.Color.light_grey(), description=replies["changeLanguage"], footer=replies["footerReaction"]))
-        await choice.add_reaction('\U0001f1eb\U0001f1f7')
-        await choice.add_reaction('\U0001f1ec\U0001f1e7')
 
-        reaction, user = await self.__bot.wait_for('reaction_add', timeout=60.0, check=check)
+        # Adding reactions
+        await choice.add_reaction('\U0001f1eb\U0001f1f7') # French flag
+        await choice.add_reaction('\U0001f1ec\U0001f1e7') # UK Flag
 
-        # Récuperer la réaction
+        # Waiting for a reaction
+        try:
+            reaction, user = await self.__bot.wait_for('reaction_add', timeout=60.0, check=self.check_language)
+
+        except asyncio.TimeoutError:
+            self.__current_user = None
+            return
+                    
+        # Process reactions
+        if str(reaction.emoji) == '\U0001f1eb\U0001f1f7': # French
+            self.__bot.language = 'fr'
+
+        else: # English (default)
+            self.__bot.language = 'en'
+
+        await choice.remove_reaction(reaction.emoji, self.__current_user)
+        # Reloading language
+        with open(ABSOLUTE_PATH+"translations/"+self.__bot.language+".json", "r") as f:
+            replies = json.load(f)
+
+        await ctx.channel.send(embed=discord.Embed(color=discord.Color.green(), description=replies["changedLanguage"]))
 
         self.__current_user = None
 
