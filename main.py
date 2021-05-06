@@ -5,9 +5,11 @@ from discord.ext import commands
 import logging
 import hangman.commands as hangman
 
+ABSOLUTE_PATH="./"
+
 # Config part
 config = configp.ConfigParser()
-config.read('config.ini')
+config.read(ABSOLUTE_PATH+'config.ini')
 
 """
 # Log part

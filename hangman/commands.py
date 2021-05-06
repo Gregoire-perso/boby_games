@@ -13,6 +13,8 @@ import json
 from unidecode import unidecode
 from random import randint
 
+ABSOLUTE_PATH='./'
+
 class HangmanGame(commands.Cog):
     def __init__(self, bot: commands.Bot, language: str, ctx: commands.Context):
         """Init a game"""
@@ -65,7 +67,7 @@ class HangmanGame(commands.Cog):
 
     async def __draw_hangman(self):
         """draw the hangman"""
-        with open("hangman/hangman_"+str(self.__nb_fails)+".txt", "r") as f:
+        with open(ABSOLUTE_PATH+"hangman/hangman_"+str(self.__nb_fails)+".txt", "r") as f:
             await self.__ctx.channel.send(embed=Embed(color=Color.light_grey(), description="```\n"+"".join(f.readlines())+"\n```"))
 
 
@@ -74,14 +76,14 @@ class HangmanGame(commands.Cog):
     async def start_game(self):
         """Start a game"""
         # Loading replies
-        with open("./hangman/translations/"+self.__language+".json", "r") as f:
+        with open(ABSOLUTE_PATH+"hangman/translations/"+self.__language+".json", "r") as f:
             replies = json.load(f)
 
         # Display rules
         await self.__ctx.channel.send(embed=Embed(color=Color.random(), description=replies["rules"]))
         
         # Choosing a word
-        with open("./hangman/translations/"+self.__language, "r") as f:
+        with open(ABSOLUTE_PATH+"hangman/translations/"+self.__language, "r") as f:
             words = f.readlines()
 
         self.__mystery_word = words[randint(0, len(words)-1)].upper().replace("\n", "")
@@ -100,6 +102,7 @@ class HangmanGame(commands.Cog):
 
             except asyncio.TimeoutError:
                 await self.__ctx.channel.send(embed=Embed(color=Color.red(), description=replies["tooSlow"]))
+                await self.__ctx.channel.send(embed=Embed(color=Color.red(), description=replies["printMysteryWord"].format(self.__mystery_word)))
                 found_word = True
                 continue
 
