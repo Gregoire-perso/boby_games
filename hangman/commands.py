@@ -33,24 +33,24 @@ class HangmanGame(commands.Cog):
 
     async def __process_message(self, msg, replies):
         """Process the message content"""
-        if len(msg.content) == 1 and msg.content.upper() in self.__tried_letters:
+        if len(msg) == 1 and msg in self.__tried_letters:
             await self.__ctx.channel.send(embed=Embed(color=Color.orange(), description=replies["letterAlreadyTried"]))
 
 
-        elif len(msg.content) == 1 and msg.content.upper() in self.__mystery_word:
-            self.__tried_letters.append(msg.content.upper())
+        elif len(msg) == 1 and msg in self.__mystery_word:
+            self.__tried_letters.append(msg)
             await self.__ctx.channel.send(embed=Embed(color=Color.green(), description=replies["rightLetter"]))
             self.__nb_essais += 1
 
 
-        elif len(msg.content) == 1:
-            self.__tried_letters.append(msg.content.upper())
+        elif len(msg) == 1:
+            self.__tried_letters.append(msg)
             await self.__ctx.channel.send(embed=Embed(color=Color.orange(), description=replies["wrongLetter"]))
             self.__nb_essais += 1
             self.__nb_fails += 1
 
 
-        elif msg.content.upper() == self.__mystery_word:
+        elif msg == self.__mystery_word:
             await self.__ctx.channel.send(embed=Embed(color=Color.green(), description=replies["rightWord"].format(self.__nb_essais)))
             self.__nb_essais += 1
             return "WON"
@@ -96,7 +96,7 @@ class HangmanGame(commands.Cog):
 
             # Waiting for an answer
             try:
-                message = await self.__bot.wait_for('message', check=self.__check_message, timeout=30.0).replace(" ", "")
+                message = await self.__bot.wait_for('message', check=self.__check_message, timeout=30.0)
 
             except asyncio.TimeoutError:
                 await self.__ctx.channel.send(embed=Embed(color=Color.red(), description=replies["tooSlow"]))
@@ -106,7 +106,7 @@ class HangmanGame(commands.Cog):
 
 
             # Testing message
-            if self.__process_message(message, replies) == "WON":
+            if await self.__process_message(message.content.upper().replace(" ", ""), replies) == "WON":
                 found_word = True
                 continue
 
