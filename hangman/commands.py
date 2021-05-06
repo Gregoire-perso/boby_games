@@ -169,7 +169,7 @@ class HangmanCommands(commands.Cog):
     #        self.__language = unidecode(text).lower()
 
 
-    @commands.command()
+    @commands.command(aliases=['sh'])
     async def start_hangman(self, ctx):
         game = HangmanGame(self.__bot, self.__language, ctx) # Create a new game
         await game.start_game() # Start the new game
