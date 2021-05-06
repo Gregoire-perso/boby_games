@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import configparser as configp
 import discord
 from discord.ext import commands
