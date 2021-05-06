@@ -1,12 +1,12 @@
 {
-	"wrongLetter": "Dommage ! Cette lettre n'est pas dans le mot...",
-	"wrongWord": "Bien tenté, mais c'est pas ça le mot... :stuck_out_tongue:",
-	"rightLetter": "Bien joué cow-boy, vous avez trouvé une nouvelle lettre ! :+1:",
-	"rightWord": "Trop fort ! Vous avez trouvé le mot en {0} essais, et je vais donc vous laisser la vie sauve ! :clap::clap::clap:", 
-	"rules": "Vous avez voulu faire le malin cow-boy ! :cowboy:\nJe crois que vous avez perdu cette fois, mais vous m'avez l'air sympa, je vais vous laisser une dernière chance.\nSi vous trouvez le mot auquel je pense à temps, vous avez la vie sauve. Mais sinon, vous finirez pendu sur la place public ! Si vous me demandez une lettre, je vous dirais où elle se trouve dans mon mot... Mais attention, vous devez trouver le mot avant que la corde vous soit passé au cou ! Allez c'est parti billy boy ! :cowboy:",
-	"letterAlreadyTried": "Mais vous êtes con ma parole ! Vous avez déjà essayé cette lettre !", 
-	"printMysteryWord": "Le mot qui allait vous sauver la vie était {0}...", 
-	"loose": "C'est con, vous êtes passé à ça :pinching_hand: de survivre... Mais du coup vous êtes morts", 
-	"tooSlow": "Vous avez été bien trop lent cow-boy, du coup ben vous êtes morts... :skull:",
-	"askLetter": "Alors, je vous écoute, vous avez une proposition cow-boy ?"
+	"wrongLetter": "Crap, that letter is not in the word...",
+	"wrongWord": "Well tried, but that's not the mystery word... :stuck_out_tongue:",
+	"rightLetter": "Good job cow-boy, you found a new letter ! :+1:",
+	"rightWord": "Well done ! You found the mystery in {0} tries ! I'll have to let you live... :clap::clap::clap:", 
+	"rules": "You showed off cow-boy ! :cowboy:\nBut you're caught ! I let you one more chance, because you seem nice.\nIf you find a mystery word in time, you're safe. But if you don't discover it, you'll be hanged in public ! You can ask me if a letter is in the word... Be careful, and find the word before the rope find you ! Let's go billy boy ! :cowboy:",
+	"letterAlreadyTried": "You're an idiot ! You've already tried this letter !", 
+	"printMysteryWord": "Your saving word was {0}...", 
+	"loose": "What a shame, you almost reach it :pinching_hand:... But you're dead :skull:", 
+	"tooSlow": "You're too slow cow-boy, and the rope find you... :skull:",
+	"askLetter": "So, I'm listening cow-boy..."
 }
