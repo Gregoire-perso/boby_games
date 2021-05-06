@@ -1,9 +1,0 @@
-{
-	"avaiblesLanguages": "Here are avaibles languages : ", 
-	"newLanguage": "Which language do you speak ? ", 
-	"newLanguageIncorrect": "Do you know this language ? Sadly, not me, sorry...",
-	"goodBye": "Good bye ! ee you soon !", 
-	"replay": "Do you want to play again ? ", 
-	"difficulty": "What are your skills ? beginner (1), trained (2), expert (3) ", 
-	"pressToQuit": "Press \"Enter\" to return to the menu"
-}

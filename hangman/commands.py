@@ -16,7 +16,7 @@ from random import randint
 ABSOLUTE_PATH='./'
 
 class HangmanGame(commands.Cog):
-    def __init__(self, bot: commands.Bot, language: str, ctx: commands.Context):
+    def __init__(self, bot: commands.Bot, language: str, ctx: commands.Context, multi: bool):
         """Init a game"""
         self.__bot = bot
         self.__language = language
@@ -25,11 +25,15 @@ class HangmanGame(commands.Cog):
         self.__tried_letters = []
         self.__nb_essais = 0
         self.__nb_fails = 0
+        self.__multi = multi
 
 #----------------------------------------------------------------------------------------
 
     def __check_message(self, msg):
-        return msg.author == self.__ctx.author and msg.channel == self.__ctx.channel
+        if self.__multi:
+            return msg.channel == self.__ctx.channel
+        else:
+            return msg.author == self.__ctx.author and msg.channel == self.__ctx.channel
 
 #----------------------------------------------------------------------------------------
 
@@ -140,15 +144,7 @@ class HangmanGame(commands.Cog):
                 continue
 
 
-        
 
-
-                
-            
-        
-        
-        
-    
 
 
 
@@ -158,21 +154,7 @@ class HangmanCommands(commands.Cog):
         self.__bot = bot
         self.__language = language
     
-    #@commands.command()
-    #async def set_language(self, ctx, text: str):
-    #    """Define the language
-    #    Must be 'french' or 'english' """
-    #    if not unidecode(text).lower() in ['french', 'english', 'francais', 'anglais']:
-    #        with open("./hangman/translations/"+self.__language+".json", "r") as replies:
-    #            wrong_language_choice = json.load(replies)["wrongLanguageChoice"]
-
-    #        await ctx.channel.send(embed=discord.Embed(color=discord.Color.red(), description=wrong_language_choice))
-
-    #    else:
-    #        self.__language = unidecode(text).lower()
-
-
-    @commands.command(aliases=['sh'])
+    @commands.command(aliases=['hangman', 'hm'])
     async def start_hangman(self, ctx):
         game = HangmanGame(self.__bot, self.__language, ctx) # Create a new game
         await game.start_game() # Start the new game
