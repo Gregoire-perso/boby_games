@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import configparser as configp
-import os
 import discord
 from discord.ext import commands
 #import logging
@@ -8,9 +7,10 @@ import json
 import asyncio
 import hangman.commands as hangman
 
+ASBOLUTE_PATH="."
 # Config part
 config = configp.ConfigParser()
-config.read(os.getcwd()+'/config.ini')
+config.read(ABSOLUTE_PATH+"/config.ini")
 
 
 
@@ -76,7 +76,7 @@ class BobyCommands(commands.Cog):
         Choosen by reacting to the bot message """
         self.__current_user = ctx.author
 
-        with open(os.getcwd()+"/translations/"+self.__bot.language+".json", "r") as f:
+        with open(ABSOLUTE_PATH+"/translations/"+self.__bot.language+".json", "r") as f:
             replies = json.load(f)
 
         choice = await ctx.channel.send(embed=discord.Embed(color=discord.Color.light_grey(), description=replies["changeLanguage"], footer=replies["footerReaction"]))
@@ -102,7 +102,7 @@ class BobyCommands(commands.Cog):
 
         await choice.remove_reaction(reaction.emoji, self.__current_user)
         # Reloading language
-        with open(os.getcwd()+"/translations/"+self.__bot.language+".json", "r") as f:
+        with open(ABSOLUTE_PATH+"/translations/"+self.__bot.language+".json", "r") as f:
             replies = json.load(f)
 
         await ctx.channel.send(embed=discord.Embed(color=discord.Color.green(), description=replies["changedLanguage"]))
